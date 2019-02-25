@@ -77,7 +77,7 @@ class Movie extends Component {
             <div className="Strapi">
                     <div class="container">
                         <center>
-                            <h1>The Star Wars API</h1>
+                            <h1 style={{color: 'white'}}>Movie Star Wars API</h1>
                                 {dataMovie}
                                 
                         </center>
