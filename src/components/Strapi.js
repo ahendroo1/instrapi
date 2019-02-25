@@ -48,15 +48,15 @@ class Strapi extends Component {
         .then((response_strapi) => {
             console.log(response_strapi.data.results)
             this.setState({  strapi: response_strapi.data.results })
-            // console.log(response_strapi.data.results[0])
         })
     }
 
     onCharacters(chr){
 
-        // console.log(this.state.strapi[chr].characters[0]);
+        this.setState({characters: []}) 
 
-        // this.setState({: "ini List"})
+
+
 
         var char_data = this.state.strapi[chr].characters ;
 
@@ -66,19 +66,10 @@ class Strapi extends Component {
             .then((response_character) => {
                 // console.log(response_character.data)
                 this.state.characters.push(response_character.data)
-                // this.setState({  strapi: response_strapi.data.results })
-                // console.log(response_strapi.data.results[0])
                 console.log(this.state.characters)
             })
             
         }
-
-        // axios.get(this.state.strapi[chr].characters[0])
-        // .then((response_character) => {
-        //     console.log(response_character.data)
-        //     // this.setState({  strapi: response_strapi.data.results })
-        //     // console.log(response_strapi.data.results[0])
-        // })
     }
 
     onStateChar(){
@@ -89,11 +80,9 @@ class Strapi extends Component {
         var numb = 0 ;
         const dataMovie = this.state.strapi.map((item, index) => {
             var title = item.title;
-            // var opening_crawl = item.opening_crawl ;
         
             return (
                 
-                // <div key={index} class="btn-clone" onClick={() => this.onCharacters(item.characters)}> 
 
                     <option value={numb++} >{title}</option>
 
@@ -103,12 +92,9 @@ class Strapi extends Component {
 
         const characters_data = this.state.characters.map((res, index) => {
             var nama = res.name;
-            // var opening_crawl = item.opening_crawl ;
         
             return (
                 
-                // <div key={index} class="btn-clone" onClick={() => this.onCharacters(item.characters)}> 
-
                     <li key={index}><p>{nama}</p></li>
 
                 // </div>
