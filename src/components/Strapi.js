@@ -4,29 +4,32 @@ import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-import { Card } from 'primereact/components/card/Card';
+// import { Card } from 'primereact/components/card/Card';
 import { Dialog } from 'primereact/components/dialog/Dialog';
 import { Button } from 'primereact/components/button/Button';
+import {ListBox} from 'primereact/listbox';
 
-class Movie extends Component {
+class Strapi extends Component {
 
     constructor() {
         super();
         this.state = {
           strapi: [],
-          visible: false
+          characters: [],
+
+
         }
         
         // this.onClick = this.onClick.bind(this);
         this.onHide = this.onHide.bind(this);
     }
 
-    onClick(judul, episode_id, director, producer, release_date) {
+    onClick(title, episode_id, director, producer, release_date) {
 
         this.componentDidMount()
         this.setState({
             visible: true,
-            judul_movie: judul,
+            title_movie: title,
             episode_id_movie: episode_id,
             director_movie: director,
             producer_movie: producer,
@@ -43,27 +46,72 @@ class Movie extends Component {
 
         axios.get('https://swapi.co/api/films/')
         .then((response_strapi) => {
-            console.log(response_strapi)
-            this.setState({strapi: response_strapi.data.results})
+            console.log(response_strapi.data.results)
+            this.setState({  strapi: response_strapi.data.results })
+            // console.log(response_strapi.data.results[0])
         })
-        
-        
+    }
+
+    onCharacters(chr){
+
+        // console.log(this.state.strapi[chr].characters[0]);
+
+        // this.setState({: "ini List"})
+
+        var char_data = this.state.strapi[chr].characters ;
+
+        var i;
+        for (i = 0; i < char_data.length; i++) { 
+            axios.get(this.state.strapi[chr].characters[i])
+            .then((response_character) => {
+                // console.log(response_character.data)
+                this.state.characters.push(response_character.data)
+                // this.setState({  strapi: response_strapi.data.results })
+                // console.log(response_strapi.data.results[0])
+                console.log(this.state.characters)
+            })
+            
+        }
+
+        // axios.get(this.state.strapi[chr].characters[0])
+        // .then((response_character) => {
+        //     console.log(response_character.data)
+        //     // this.setState({  strapi: response_strapi.data.results })
+        //     // console.log(response_strapi.data.results[0])
+        // })
+    }
+
+    onStateChar(){
+        console.log(this.state.characters)
     }
 
     render() {
-
+        var numb = 0 ;
         const dataMovie = this.state.strapi.map((item, index) => {
-            var judul = item.title;
-            var opening_crawl = item.opening_crawl ;
+            var title = item.title;
+            // var opening_crawl = item.opening_crawl ;
         
             return (
                 
-                <div key={index} class="btn-clone" onClick={() => this.onClick(judul, item.episode_id, item.director, item.producer, item.release_date)}>                
-                    {/* <button class="btn btn-primary" >{judul}</button> */}
-                    <Card title={judul} subtitle={opening_crawl} style={{width: '100%'}} className="ui-card-shadow " >
-                        {opening_crawl}
-                    </Card>
-                </div>
+                // <div key={index} class="btn-clone" onClick={() => this.onCharacters(item.characters)}> 
+
+                    <option value={numb++} >{title}</option>
+
+                // </div>
+            )
+        })
+
+        const characters_data = this.state.characters.map((res, index) => {
+            var nama = res.name;
+            // var opening_crawl = item.opening_crawl ;
+        
+            return (
+                
+                // <div key={index} class="btn-clone" onClick={() => this.onCharacters(item.characters)}> 
+
+                    <li key={index}><p>{nama}</p></li>
+
+                // </div>
             )
         })
 
@@ -78,16 +126,27 @@ class Movie extends Component {
                     <div class="container">
                         <center>
                             <h1 style={{color: 'white'}}>Movie Star Wars API</h1>
-                                {dataMovie}
-                                
+                                {/* {dataMovie} */}
+                                <select class="custom-select" value={this.state.value}  onChange={(e) => this.onCharacters(e.target.value)}>
+                                    <option value="0" selected>Choose...</option>
+                                    {dataMovie}
+                                </select>
+                                <button class="btn btn-primary" onClick={() => this.onStateChar()} >State</button>
+                                <ul style={{color: "white"}}>{characters_data}</ul>
+
                         </center>
 
-                        <Dialog header={this.state.judul_movie} visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
+
+                        {/* <Dialog header={this.state.title_movie} visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
                             <h4>{this.state.director_movie}</h4>
                             <p>{this.state.producer_movie}</p>
                             <p>{this.state.release_date_movie}</p>
-                        </Dialog>
+                        </Dialog> */}
 
+
+                        {/* <h3 className="first">Single</h3> */}
+                        {/* <ListBox value={this.state.characters} options={this.state.characters} onChange={(e) => this.setState({characters: e.value})} optionLabel="name"/>
+                     */}
 
                     </div>
             </div>
@@ -95,4 +154,4 @@ class Movie extends Component {
     }
 }
 
-export default Movie;
+export default Strapi;
