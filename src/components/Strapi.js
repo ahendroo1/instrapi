@@ -16,8 +16,6 @@ class Strapi extends Component {
         this.state = {
           strapi: [],
           characters: [],
-
-
         }
         
         // this.onClick = this.onClick.bind(this);
@@ -53,28 +51,30 @@ class Strapi extends Component {
 
     onCharacters(chr){
 
-        this.setState({characters: []}) 
+        this.setState({characters: []})
+        console.log(chr)
+        if(chr === 'x'){
+            this.setState({characters: []})
+        }else{
+            var char_data = this.state.strapi[chr].characters ;
 
-
-
-
-        var char_data = this.state.strapi[chr].characters ;
-
-        var i;
-        for (i = 0; i < char_data.length; i++) { 
-            axios.get(this.state.strapi[chr].characters[i])
-            .then((response_character) => {
-                // console.log(response_character.data)
-                this.state.characters.push(response_character.data)
-                console.log(this.state.characters)
-            })
-            
+            var i;
+            var arr = [];
+            for (i = 0; i < char_data.length; i++) { 
+                axios.get(this.state.strapi[chr].characters[i])
+                .then((response_character) => {
+                    // console.log(response_character.data)
+                    arr.push(response_character.data)
+                    // console.log(this.state.characters)
+                    return this.setState({characters: arr})
+                })
+            }  
         }
+       
     }
 
-    onStateChar(){
-        console.log(this.state.characters)
-    }
+    
+
 
     render() {
         var numb = 0 ;
@@ -82,22 +82,16 @@ class Strapi extends Component {
             var title = item.title;
         
             return (
-                
-
-                    <option value={numb++} >{title}</option>
-
+                <option value={numb++} >{title}</option>
                 // </div>
             )
         })
 
-        const characters_data = this.state.characters.map((res, index) => {
+        const charactersData = this.state.characters.map((res, i) => {
             var nama = res.name;
         
             return (
-                
-                    <li key={index}><p>{nama}</p></li>
-
-                // </div>
+                <li key={i}><p>{res.name}</p></li>
             )
         })
 
@@ -114,14 +108,15 @@ class Strapi extends Component {
                             <h1 style={{color: 'white'}}>Movie Star Wars API</h1>
                                 {/* {dataMovie} */}
                                 <select class="custom-select" value={this.state.value}  onChange={(e) => this.onCharacters(e.target.value)}>
-                                    <option value="0" selected>Choose...</option>
+                                    <option value="x" selected>Choose...</option>
                                     {dataMovie}
                                 </select>
-                                <button class="btn btn-primary" onClick={() => this.onStateChar()} >State</button>
-                                <ul style={{color: "white"}}>{characters_data}</ul>
 
+                                {/* <button class="btn btn-primary" onClick={() => this.onStateChar(this.state.characters)} >State</button> */}
+                                
                         </center>
 
+                        <ul style={{color: "white", padding: "20px"}}>{charactersData}</ul>
 
                         {/* <Dialog header={this.state.title_movie} visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
                             <h4>{this.state.director_movie}</h4>
