@@ -4,10 +4,8 @@ import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-// import { Card } from 'primereact/components/card/Card';
 import { Dialog } from 'primereact/components/dialog/Dialog';
 import { Button } from 'primereact/components/button/Button';
-import {ListBox} from 'primereact/listbox';
 
 class Strapi extends Component {
 
@@ -16,9 +14,11 @@ class Strapi extends Component {
         this.state = {
           strapi: [],
           characters: [],
+          starship: [],
+          pople: [],
+          visible: false
         }
-        
-        // this.onClick = this.onClick.bind(this);
+
         this.onHide = this.onHide.bind(this);
     }
 
@@ -33,7 +33,6 @@ class Strapi extends Component {
             producer_movie: producer,
             release_date_movie: release_date
         });
-
     }
 
     onHide(event) {
@@ -44,7 +43,6 @@ class Strapi extends Component {
 
         axios.get('https://swapi.co/api/films/')
         .then((response_strapi) => {
-            console.log(response_strapi.data.results)
             this.setState({  strapi: response_strapi.data.results })
         })
     }
@@ -52,10 +50,11 @@ class Strapi extends Component {
     onCharacters(chr){
 
         this.setState({characters: []})
-        console.log(chr)
+
         if(chr === 'x'){
             this.setState({characters: []})
         }else{
+
             var char_data = this.state.strapi[chr].characters ;
 
             var i;
@@ -63,35 +62,55 @@ class Strapi extends Component {
             for (i = 0; i < char_data.length; i++) { 
                 axios.get(this.state.strapi[chr].characters[i])
                 .then((response_character) => {
-                    // console.log(response_character.data)
                     arr.push(response_character.data)
-                    // console.log(this.state.characters)
                     return this.setState({characters: arr})
                 })
             }  
+        }  
+    }
+    
+    onStarship(star){
+
+        this.setState({starship: []})
+        if(star.length === 0){
+
+            this.setState({visible:true, starship: [{"name": "Not Found"}]})
+
+        } else {
+
+            var arr = [];
+            var i;
+            for (i = 0; i < star.length; i++) { 
+                axios.get(star[i])
+                .then((response_starship) => {
+                    arr.push(response_starship.data)
+                    return this.setState({starship: arr, visible:true})
+                })
+            }
         }
-       
+
     }
 
-    
-
-
     render() {
-        var numb = 0 ;
+        var numbMovie = 0 ;
         const dataMovie = this.state.strapi.map((item, index) => {
-            var title = item.title;
         
             return (
-                <option value={numb++} >{title}</option>
-                // </div>
+                <option value={numbMovie++} >{item.title}</option>
             )
         })
 
         const charactersData = this.state.characters.map((res, i) => {
-            var nama = res.name;
         
             return (
-                <li key={i}><p>{res.name}</p></li>
+                <li onClick={() => this.onStarship(res.starships)}><p>{res.name}</p></li>
+            )
+        })
+
+    
+        const starshipData = this.state.starship.map((res, i) => {
+            return (
+                <p>{res.name}</p>
             )
         })
 
@@ -106,28 +125,20 @@ class Strapi extends Component {
                     <div class="container">
                         <center>
                             <h1 style={{color: 'white'}}>Movie Star Wars API</h1>
-                                {/* {dataMovie} */}
+
                                 <select class="custom-select" value={this.state.value}  onChange={(e) => this.onCharacters(e.target.value)}>
                                     <option value="x" selected>Choose...</option>
                                     {dataMovie}
                                 </select>
 
-                                {/* <button class="btn btn-primary" onClick={() => this.onStateChar(this.state.characters)} >State</button> */}
-                                
                         </center>
 
                         <ul style={{color: "white", padding: "20px"}}>{charactersData}</ul>
 
-                        {/* <Dialog header={this.state.title_movie} visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
-                            <h4>{this.state.director_movie}</h4>
-                            <p>{this.state.producer_movie}</p>
-                            <p>{this.state.release_date_movie}</p>
-                        </Dialog> */}
+                        <Dialog header="Starship" visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
+                            {starshipData}
+                        </Dialog>
 
-
-                        {/* <h3 className="first">Single</h3> */}
-                        {/* <ListBox value={this.state.characters} options={this.state.characters} onChange={(e) => this.setState({characters: e.value})} optionLabel="name"/>
-                     */}
 
                     </div>
             </div>
