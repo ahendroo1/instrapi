@@ -22,19 +22,6 @@ class Strapi extends Component {
         this.onHide = this.onHide.bind(this);
     }
 
-    onClick(title, episode_id, director, producer, release_date) {
-
-        this.componentDidMount()
-        this.setState({
-            visible: true,
-            title_movie: title,
-            episode_id_movie: episode_id,
-            director_movie: director,
-            producer_movie: producer,
-            release_date_movie: release_date
-        });
-    }
-
     onHide(event) {
         this.setState({visible: false});
     }
