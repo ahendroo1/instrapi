@@ -125,13 +125,13 @@ class Strapi extends Component {
                     <div class="container">
                         <center>
                             <h1 style={{color: 'white'}}>Movie Star Wars API</h1>
-
-                                <select class="custom-select" value={this.state.value}  onChange={(e) => this.onCharacters(e.target.value)}>
-                                    <option value="x" selected>Choose...</option>
-                                    {dataMovie}
-                                </select>
+                            <p style={{color: "white", padding: "20px"}}>Amad Hendro</p>
 
                         </center>
+                        <select class="custom-select" value={this.state.value}  onChange={(e) => this.onCharacters(e.target.value)}>
+                            <option value="x" selected>Choose...</option>
+                            {dataMovie}
+                        </select>
 
                         <ul style={{color: "white", padding: "20px"}}>{charactersData}</ul>
 
