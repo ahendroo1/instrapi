@@ -90,7 +90,7 @@ class Strapi extends Component {
         const charactersData = this.state.characters.map((res, i) => {
         
             return (
-                <li onClick={() => this.onStarship(res.starships)}><p>{res.name}</p></li>
+                <li  onClick={() => this.onStarship(res.starships)}><p class="btn btn-warning"> {res.name}</p></li>
             )
         })
 
@@ -119,13 +119,12 @@ class Strapi extends Component {
                             <option value="x" selected>Choose...</option>
                             {dataMovie}
                         </select>
-
+            
                         <ul style={{color: "white", padding: "20px"}}>{charactersData}</ul>
 
                         <Dialog header="Starship" visible={this.state.visible} style={{width: '50vw'}} footer={footer} onHide={this.onHide} maximizable>
                             {starshipData}
                         </Dialog>
-
 
                     </div>
             </div>
